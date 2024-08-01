@@ -1,0 +1,19 @@
+---
+title: "ベイズ統計学事前準備"
+format: 
+ html:
+  theme: default
+  toc: true
+  toc-title: 目次
+  number-sections: false
+  self-contained: true
+  coe-tools: false
+  code-fold: true
+  # embed-resources: true
+  # self-contained-math: true
+execute: 
+ error: false
+ warning: false
+author: Riku Masuda
+---
+
