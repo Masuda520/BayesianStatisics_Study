@@ -239,16 +239,17 @@ $$
 
 ## 2. ベイズ統計学の基本的な考え方・基本用語  
 この章ではベイズ統計学の基本的な考え方と、基本的な用語を導入します。  
+※これ以降この文書では、$y$はデータのことを指し、$\theta$はパラメータのことを指しています。  
 
 ### ベイズ統計学におけるパラメータ  
 入門・基礎レベルで習う「通常の統計学」――これは「頻度論」と呼ばれます――では、パラメータは未知の**定数**だと考えます。  
-例えば、ある小学校の6年生男子全体に対して、その母平均$\theta$を推定する問題を考えてみます。$\theta$は分析者が知ることができない何かしらの定数であって、これを推定するために手元のデータから**推定量**という値を構成・計算するのでした。（例えば標本平均は母平均を知るための推定量です）  
+例えば、ある小学校の6年生男子全体に対して、その母平均$\theta$を推定する問題を考えてみます。$\theta$は分析者が知ることができない何かしらの定数であって、これを推定するために手元のデータから**推定量**$\hat{\theta}$という値を構成・計算するのでした。（例えば標本平均は母平均を知るための推定量です）  
 頻度論ではパラメータ$\theta$は定数なので、例えば$\theta$の95\%信頼区間として[131cm,162cm]が得られたとしても、「身長の平均が131cm以上、162cm以下である確率は95\%である」とは言えないのでした。パラメータ$\theta$は定数なので、$131 \leq \theta \leq 162$である確率は1か0かしかないからです。  
 **……わかりにくい！！！！**  
 そうです。頻度論における「不確実性評価」は言ってる意味が分かりにくいのです。  
 ベイズ統計学ではこのような面倒な表現は出てきません。「身長の平均が131cm以上、162cm以下である確率は95\%である」というような表現も許されます。なぜなら、**ベイズ統計学ではパラメータを確率変数だと考えるから**です。  
-頻度論とベイズ統計学って結局何が違うの？　と聞かれたら桝田はこう答えることにしています。「**パラメータが確率変数だったらそれはベイズ統計学**です」と。  
-哲学的な背景は完全に異なりますが、技術的な面だけ考えるのであれば、パラメータが確率変数であるか否かが「頻度論」と「ベイズ統計学」の唯一の違いと言ってしまっても良いほどだと考えています。  
+
+**ベイズ統計学とは、パラメータを確率変数として捉えた統計学のこと**です。
 
 ### モデリング：事前分布・尤度  
 さて、ベイズ統計学ではパラメータ$\theta$は確率変数なのでした。確率変数なので、$\theta$が従う確率分布が存在します。  
@@ -261,7 +262,7 @@ $$
 また、**パラメータ$\theta$が条件付けられたとき（＝固定されたとき）に、データ$y$が従っている分布**のことを、**尤度**と呼びます。この表現は頻度論でも同様でした。  
 
 【尤度の例】--------------------  
-例えば、データ$y_1,y_2,\cdots,y_n$が確率分布$N(\theta, 1)$に独立に従っているとき、このことを以下のように表現しました。  
+例えば、データ$y_1,y_2,\cdots,y_n$が確率分布$N(\theta, 1)$に独立同一に従っているとき、このことを以下のように表現しました。  
 $$
 y_1,y_2,\cdots,y_n | \theta \overset{i.i.d.}{\sim} N(\theta, 1)
 $$
@@ -306,7 +307,7 @@ $$
 p(\theta) = p(\beta_0, \beta_1, \sigma^2) = p(\beta_0) p(\beta_1) p(\sigma^2)
 $$
 
-それぞれのパラメータの周辺分布は、例えば以下のようにしておきます。  
+それぞれのパラメータの周辺分布は、例えば以下のようにモデリングしてみます。  
 $$
 \begin{equation*}
 \begin{split}
@@ -350,8 +351,6 @@ $$
 頻度論における「推定」とは、未知の定数であるパラメータ$\theta$を当てるための値として、推定量と呼ばれる値$\hat{\theta}$をデータから計算することを言うのでした。  
 **ベイズ統計学における「推定」とは、条件付き分布$p(\theta | y)$を求めることを指します**。この確率分布$p(\theta | y)$のことを**事後分布**と呼びます。  
 「事後分布$p(\theta | y)$を求める」ことを「ベイズ推定する」あるいは単に「推定する」と表現します。  
-とにかく覚えておくべきは、**ベイズ統計では、事後分布を求めればOK**ということです。ベイズ統計学における推論は全て事後分布を求めるところからスタートしますし、事後分布さえ手に入ればそのほか数学的に難しいポイントは存在しません。  
-とにかく覚えておくべきは、**ベイズ統計では、事後分布を求めればOK**ということです！！！  
 
 ……なぜ事後分布を求めることが推定すること（＝母集団の特性を推測すること）になるのでしょうか？　少し考えてみます。  
 まず、**$\theta$の周辺分布は、事前分布$p(\theta)$でした。これは分析者が決める確率分布であり、この中には事前知識は入っていても、データの情報は入っていません**。  
@@ -371,56 +370,96 @@ $$
 **「事後分布」＝「データの情報」×「事前知識」** の形になっていることが分かります。  
 $\theta$に対する知識を、事前分布$p(\theta)$という形で既に持っている状態だとして、そこにデータの情報$p(y|\theta)$を組み込んで$\theta$に対する知識をアップデートしたものが$p(\theta|y)$となるわけです。  
 
-イメージをつかむために、具体例を考えてみます。  
+事後分布のイメージを図で掴んでみましょう。  
 【例】-------------------  
-手元に、データ$y = (y_1,y_2,y_3)$があるとします。母平均$\theta$を推測してみたいとしましょう。  
-<モデリング>  
-1. 尤度：$y_i | \theta \sim N(\theta , 1)$とします。  
-2. 事前分布：$\theta \sim N(0,5)$とします。桝田のもつ事前知識より多分$\theta=0$くらいだと予想していますが、自信がないので分散を5と広めに取りました。  
-
-事前分布の関数を描いてみましょう。  
-```{r}
-curve(dnorm(x, sd=sqrt(5)) , from = -10 , to = 10 , ylab = "p(theta)", xlab = "theta", main = "事前分布の密度関数")
-```
-
-平均値は0ですが、$\theta=3$などもありえそうな感じの分布になっています。
-
-さて、データ$y$は具体的には以下のようだったとしましょう。  
-```{r}
-set.seed(200)
-y = rnorm(n = 3 , mean = 5)
-y
-```
-
-うわ、なんか5ぐらい行ってますね。全然0じゃなさそうだ。  
-さて、尤度関数を描いてみましょう。まず数式を使って整理してみます。  
+データ$y = (y_1,y_2,\cdots,y_n)$があるとして、$y_i$の平均$\theta$を推定するという、シンプルな問題を考えてみましょう。  
+今回は、以下のようなモデリングをしてみます。  
 $$
-p(y|\theta) = p(y_1,y_2,y_3|\theta) = \prod_{i=1}^{3} p(y_i | \theta) = \prod_{i=1}^{3} \frac{1}{\sqrt{2\pi}} \exp \left( -\frac{1}{2} (y_i - \theta)^2 \right)
+\begin{equation*}
+\begin{split}
+y_i |\theta &\overset{i.i.d}{\sim} N(\theta, 1) \\
+\theta &\sim N(0,\tau ^2)
+\end{split}
+\end{equation*}
 $$
 
-Rで描いてみます。**横軸に$\theta$を取ります(尤度関数は「$\theta$の関数」でした！)**。  
+尤度$p(y|\theta) = \prod _{i=1}^n p(y_i | \theta)$が正規分布の密度関数の積であり、事前分布$p(\theta)$が$N(0,\tau^2)$であるようなモデルになっています。$\tau^2$はハイパーパラメータです。  
+試しにこのモデルから乱数を作ってみます。  
+$\tau ^2 = 10$と設定した場合は次のようになります。  
 ```{r}
-Likelihood <- function(theta){
-  res <- 1
-  for(i in 1:3){
-    res <- res * 
-      dnorm(y[i] , mean = theta , sd = 1)
-  }
-  return(res)
-}
-curve(Likelihood(x) , from = -10 , to = 10 , ylab = "p(y|theta)", xlab = "theta" , main = "尤度関数")
+set.seed(10)
+tau_squared = 10
+theta_rand = rnorm(n = 500 , mean = 0 , sd = sqrt(tau_squared))
+y_rand = rnorm(n = 500 , mean = theta_rand , sd = 1)
+data = tibble(y = y_rand , theta = theta_rand)
+data %>%
+  ggplot(aes(x = theta ,  y = y) ) + 
+  ylim(-13,16.5) + 
+  geom_point() +
+  geom_line(tibble(x_vec = seq(-13,13,0.01) , y_vec = 10+50*dnorm(seq(-13,13,0.01),sd=sqrt(tau_squared)) ) , mapping = aes(x = x_vec, y = y_vec), linewidth = 1 , col = "red" ) + 
+  labs(title = "散布図はモデルから生成") + 
+  theme_minimal()
 ```
 
-**$\theta = 5$周辺に値をとる関数である**ことが分かります。  
-この二つを掛け算した関数は、描画すると以下のようになります。  
+赤線が$\theta$の周辺分布（＝事前分布）を示しています。  
+さて、手元のデータ$y\ \ (n=30)$をこの散布図の中に青線で書き加えてみたいと思います。  
 ```{r}
-curve(Likelihood(x)*dnorm(x, sd=sqrt(5)) , from = -10 , to = 10 , ylab = "p(y|theta)×p(theta)", xlab = "theta" , main = "事後分布")
+set.seed(10)
+y_obs = rnorm(n = 30 , mean = -3 , sd = 1)
+ggplot(tibble(obs = y_obs) , mapping = aes(x = obs)) + 
+  geom_histogram(aes(y = after_stat(density)), fill = "blue",binwidth = 0.35) + 
+  labs(title = "観測データのヒストグラム (n = 30)：標本平均は-3.344676", x = "y") + 
+  theme_minimal()
+
+data %>%
+  ggplot(aes(x = theta ,  y = y) ) + 
+  geom_point() +
+  ylim(-13,16.5) + 
+  geom_line(tibble(x_vec = seq(-13,13,0.01) , y_vec = 10+50*dnorm(seq(-13,13,0.01),sd=sqrt(tau_squared)) ) , mapping = aes(x = x_vec, y = y_vec), size = 1 , col = "red" ) + 
+  geom_hline(yintercept = y_obs , col = "blue" , alpha = 0.2) + 
+  labs(title = "散布図はモデルから生成。青線は実データから書き込み") +
+  theme_minimal()
 ```
 
-だいたい、尤度関数と同じ形だということがわかりました。  
-このように、事前分布よりも尤度の方が「強い」場合、事後分布はほとんど尤度関数と同じ形になります。  
-事前分布$p(\theta)$よりも、さらに妥当な$\theta$の確率分布$p(\theta | y)$を得ることができました！  
-どうやらパラメータ$\theta$は、$\theta=5$の周辺に値を取りそうです！  
+ここで、青線とかぶってる位置にある乱数を見てみましょう。  
+```{r}
+data$label = abs(y_rand - mean(y_obs)) < 2
+data %>%
+  ggplot(aes(x = theta ,  y = y, col = label) ) + 
+  geom_point() +
+  scale_color_manual(values = c("FALSE" = "black", "TRUE"="blue"))+  
+  ylim(-13,16.5) + 
+  geom_line(tibble(x_vec = seq(-13,13,0.01) , y_vec = 10+50*dnorm(seq(-13,13,0.01),sd=sqrt(tau_squared)) ) , mapping = aes(x = x_vec, y = y_vec), size = 1 , col = "red" ) + 
+  geom_hline(yintercept = y_obs , col = "blue" , alpha = 0.2) +  
+  labs(title = "散布図はモデルから生成。青線は実データから書き込み") +
+  theme_minimal() + 
+  theme(legend.position = "none")
+```
+
+**イメージとしては、この部分の$\theta$が事後分布になっています**。  
+事後分布を図に書き加えてみます。  
+```{r}
+posterior_mean = sum(y_obs)/(30+1/tau_squared)
+posterior_var = tau_squared/(30*tau_squared + 1)
+data %>%
+  ggplot(aes(x = theta ,  y = y, col = label) ) + 
+  geom_point() +
+  scale_color_manual(values = c("FALSE" = "black", "TRUE"="blue"))+  
+  ylim(-13,16.5) + 
+  geom_line(tibble(x_vec = seq(-13,13,0.01) , y_vec = 10+50*dnorm(seq(-13,13,0.01),sd=sqrt(tau_squared)) ) , mapping = aes(x = x_vec, y = y_vec), size = 1 , col = "red" ) + 
+  geom_hline(yintercept = y_obs , col = "blue" , alpha = 0.2) +  
+  geom_line(tibble(x_vec = seq(-13,13,0.01) , 
+    y_vec = mean(y_obs)+5*dnorm(seq(-13,13,0.01),mean=posterior_mean,sd=sqrt(posterior_var)) ) ,
+      mapping = aes(x = x_vec, y = y_vec), linewidth = 1 , col = "gold" ) + 
+  labs(title = "散布図はモデルから生成。青線は実データから書き込み") +
+  theme_minimal() + 
+  theme(legend.position = "none")
+```
+
+事前分布の段階では$\theta$の期待値は0でしたが、事後分布では$\theta$の期待値が-3程度になっていることがわかります。  
+
+さて、この例では「事前分布$p(\theta)$」 「同時分布$p(y,\theta)$」 「事後分布$p(\theta | y)$」を図示してみました。  
+あくまでイメージを掴むためのものであり、正確な説明ではないことに注意してください。  
 【例　終わり】-------------------  
 
 ### 予測分布  
